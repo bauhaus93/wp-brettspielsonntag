@@ -1,0 +1,49 @@
+- name: Get current TZ
+  stat:
+    path: /etc/localtime
+  register: timezone_file
+
+- name: "Set current TZ to {{ timezone }}, if not set"
+  file:
+    src: "/usr/share/zoneinfo/{{ timezone }}"
+    dest: /etc/localtime
+    state: link
+  when: timezone_file.stat.islnk is not defined or timezone_file.stat.path.find(timezone) == -1
+
+- name: OS-specific setup
+  include_tasks: "setup-{{ ansible_facts['distribution'] }}.yml"
+  with_items:
+    - "Archlinux"
+    - "CentOS"
+  when: ansible_facts["distribution"] == item
+
+- name: Install tools from package manager
+  package:
+    name:
+      - vim
+      - python-pip
+    state: latest
+
+- name: Update SSH configuration to improve security
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regex: "{{ item.regex }}"
+    line: "{{ item.line }}"
+    state: present
+    validate: "sshd -t -f %s"
+  with_items:
+    - regex: "^PasswordAuthentication"
+      line:
+        "PasswordAuthentication no"
+        # - regex: "^PermitRootLogin"
+        # line: "PermitRootLogin no"
+    - regex: "^Port"
+      line: "Port 22"
+  notify: Restart SSH
+
+- name: Authorize SSH keys
+  ansible.posix.authorized_key:
+    key: "{{ item }}"
+    state: present
+    user: root
+  with_items: "{{ authorized_keys }}"

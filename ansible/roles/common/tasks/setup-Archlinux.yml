@@ -1,0 +1,10 @@
+- name: Update pacman cache
+  community.general.pacman:
+    update_cache: yes
+
+- name: Enable de_AT.UTF-8 locale, if not enabled
+  lineinfile:
+    path: /etc/locale.gen
+    regexp: '^#\sde_AT\.UTF-8 UTF-8'
+    line: "de_AT.UTF-8 UTF-8"
+  notify: Generate Locales

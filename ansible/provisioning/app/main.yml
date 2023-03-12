@@ -1,0 +1,38 @@
+- hosts: app
+  become: true
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - common
+    - firewall
+    - nginx
+    - docker
+
+  tasks:
+    - name: Install pip dependencies
+      pip:
+        name:
+          - jsondiff
+        state: latest
+
+    - name: Copy docker stack file
+      template:
+        src: "templates/stack.yml.j2"
+        dest: "/opt/stack.yml"
+        owner: root
+        group: root
+        mode: "0664"
+
+    - name: Create docker swarm
+      community.docker.docker_swarm:
+        advertise_addr: 10.114.0.2
+        state: present
+
+    - name: Deploy docker stack
+      community.docker.docker_stack:
+        name: wordpress
+        state: present
+        compose:
+          - /opt/stack.yml

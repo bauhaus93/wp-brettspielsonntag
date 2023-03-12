@@ -1,0 +1,34 @@
+version: "3.1"
+
+services:
+  wordpress:
+    image: wordpress:latest
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: "{{ db_user }}"
+      WORDPRESS_DB_PASSWORD:  "{{ db_password }}"
+      WORDPRESS_DB_NAME: "{{ db_database_name }}"
+      WP_HOME: "http://http://0.0.0.0:8080"
+      WP_SITEURL: "http://http://0.0.0.0:8080"
+    volumes:
+      - wordpress:/var/www/html/wp-content
+
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: "{{ db_database_name }}"
+      MYSQL_USER: "{{ db_user }}"
+      MYSQL_PASSWORD: "{{ db_password }}"
+      MYSQL_ROOT_PASSWORD: "{{ db_root_password }}"
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  wordpress:
+  db:

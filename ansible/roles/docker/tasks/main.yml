@@ -1,0 +1,22 @@
+- name: Install dependencies from package manager
+  package:
+    name:
+      - docker
+    state: latest
+  when: ansible_facts["distribution"] == "Archlinux"
+
+- name: Install docker from curl
+  shell: "curl -fsSL https://get.docker.com/ | sh"
+  when: ansible_facts["distribution"] == "CentOS"
+
+- name: Install Docker PIP dependencies, if missing
+  pip:
+    name:
+      - docker
+    state: latest
+
+- name: Start docker service, if not running
+  service:
+    name: docker
+    state: started
+    enabled: yes

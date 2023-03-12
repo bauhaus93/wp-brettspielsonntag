@@ -1,0 +1,9 @@
+.env
+.vaultpw
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
+
+ansible/group_vars/**/vault
+backup/
+.terraform/
