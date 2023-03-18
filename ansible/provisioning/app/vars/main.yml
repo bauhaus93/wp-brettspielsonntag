@@ -1,6 +1,6 @@
 nginx_vhosts:
-  - listen: "80 default_server"
-    server_name: 64.225.96.123
+  - listen: 80
+    server_name: brettspielsonntag
     extra_parameters: |
       location / {
         proxy_pass http://0.0.0.0:8080;
@@ -9,11 +9,10 @@ nginx_vhosts:
 
 firewall_open_ports:
   - { port: 80, prot: tcp }
+  - { port: 443, prot: tcp }
   - { port: 22, prot: tcp }
-  - { port: 8080, prot: tcp }
 
-ansible_ssh_private_key_file: "{{ lookup('env', 'SSH_KEY_FILE') }}"
+stack_name: bps
 
 authorized_keys:
-  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDKbyJY447jdeDk5y0aAgN3Rwc6EkEiJfyCL/xzgiZwWEEp3+AOZ6MIt6OIr9CyE1bglkcSDEcvGO0TWMLar+GSCzeI8s3r2yDmgy/qF7pCBfBjNc5d+4k5y0idOQKYNc5kHfDasK189q8Emi+O6IMttzwKKtlkMOa11t/mIOLCPeC5A6XPz05xQHRATgZigMp82jvAwwrojpoR7Ua+Z2k5ksrj+jJQIxyqnmQM5UpO9mthRrojzMEpKIpOOPHVlvW32WmGGDH145gaOBQtgnpQ7qw1myPaWgM/h6xhO8dU4gHmmZutLKZql/ooJLYl1vnFFjhmIp6daStsVqVqm
-    77ai+2mA1/c3DP1LbqZT0ScQWi6avM5C2uXLoZ7rQn/qCdGak9lrNYpwDVZsaROB36BgwgiqedXzcbC+DZS34udo55ZLvr14bQHFvkzDXtBAphqSzHd1TojZe2687PPX9mZ2HCwC/VtK+Zzn7WW9cfXvL7tQlqgjJQaanEWi04VWxc= jakob"
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCftXa/vwLo8HvDatDiwZUbvxPJGn+pzHjI8GciL4IeeqGwuQOKlswNIGyi8vpR3VgF4ZS1qC9fjkzMh3XddxttqChaZt0DSe0swBPB2S+0GNpUKDRdVqrZDR24g/FOhU6mEy18k0k7bmZyVzbxN31cIGiZEpDw3cdUizapwHhPzvvvtI1fOTePwyCW8CfKAAKxtjzfz8qDtuYuFXDuixmfpL9tyIODwExw6cZXTRy3VZkrn1eqzWzSoFpEXID6w+7yEyVX5lyESMTdjQtD8yR7d6WRNdj88b+wXt+4njBfaoq57WRRQqp5ShP+nqcZv3tuVPE4VTiLUyrCgV4ySQD7byXUaqdShYa3BvZI0ZwWQqnk6Mvx4Jrb8PIPD1GFRj1aNouiwp9WDbPMQtJVfldac/wz+44cuWBPuKmijS3TOjKnOLa9YObMghHyzb0GHoBgbAtAJzlWnBUQylTnFGkTL6cA1YfxDKqtuvIDezzbr8wD3/9XZ5R8EAGCXbvArRswRNB2p37I+4xYzv06+IBFqQJKIhDGBFjoyVL0ubVdK5Bf5L0qxDPf6Kx8u8u2A2tBysfdxLd9Bgc/yhk5h3HbkBbEQabGgueX2nW9brJNw/yVtmJ4znWyLobI0izcl1z8jRPhs/q7xMiCopsjQHbCLxwYlg9WINte4p+l3HYC2Q== terraform"

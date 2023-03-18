@@ -1,0 +1,13 @@
+#!/bin/sh
+
+sudo docker run -it --rm \
+  -v bps_letsencrypt_dir:/etc/letsencrypt \
+  -v bps_letsencrypt_challenge_dir:/opt/data \
+  certbot/certbot \
+  certonly --webroot \
+  -w /opt/data \
+  -d {{ wordpress_domain }} \
+  --email schlemihl123+certbot-bps@gmail.com \
+  --agree-tos --no-eff-email
+
+

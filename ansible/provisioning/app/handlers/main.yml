@@ -1,0 +1,4 @@
+- name: Restart nginx service
+  docker_swarm_service_update:
+    name: "{{ stack_name }}_nginx"
+    force_update: true

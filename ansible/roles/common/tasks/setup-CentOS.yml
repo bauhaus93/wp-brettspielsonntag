@@ -1,7 +1,11 @@
 - name: Update yum
   command: yum -y update
+  register: yum_update
+  changed_when: '"Nothing to do." not in yum_update.stdout'
 
-- name: Install epel
+- name: Install epel & yum utils
   package:
-    name: epel-release
+    name:
+      - epel-release
+      - yum-utils
     state: latest

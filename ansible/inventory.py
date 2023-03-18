@@ -23,8 +23,9 @@ def parse_args():
 def get_group_variables():
     return {
         "ansible_user": "root",
-        "ansible_ssh_private_key_file": "{{ lookup('env', 'ANSIBLE_SSH_KEY_FILE') }}",
+        "ansible_ssh_private_key_file": "~/.ssh/terraform/id_rsa",
         "ansible_ssh_port": "22",
+        "wordpress_domain": "brettspielsonntag.at",
     }
 
 
@@ -44,7 +45,7 @@ def create_inventory(file_path: str):
         "_meta": {"hostvars": {}},
     }
 
-    for (group, hosts) in terraform_inventory.items():
+    for group, hosts in terraform_inventory.items():
         if group not in inventory:
             inventory[group] = {"hosts": [], "vars": {}}
         for host in hosts:

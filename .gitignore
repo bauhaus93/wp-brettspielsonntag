@@ -3,7 +3,9 @@
 terraform.tfstate
 terraform.tfstate.backup
 .terraform.lock.hcl
+terraform/.*.tfvars
 
 ansible/group_vars/**/vault
 backup/
 .terraform/
+.DS_Store/

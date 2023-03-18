@@ -8,6 +8,10 @@ if [ ! -f "$SOURCE_DUMP" ]; then
     exit 1
 fi
 
+
+CONTAINER_DB=$(docker container ls | grep 'wordpress_db' | awk '{ print $1 }')
+CONTAINER_WP=$(docker container ls | grep 'wordpress_wordpress' | awk '{ print $1 }')
+
 tar xvzf "$SOURCE_DUMP" -C "$TMP_DIR"
 
 docker cp -a "$TMP_DIR/wp" "$CONTAINER_WP":'/var/www/html'

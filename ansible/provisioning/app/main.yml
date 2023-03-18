@@ -7,7 +7,6 @@
   roles:
     - common
     - firewall
-    - nginx
     - docker
 
   tasks:
@@ -17,13 +16,28 @@
           - jsondiff
         state: latest
 
-    - name: Copy docker stack file
+    - name: Create docker stack file
       template:
         src: "templates/stack.yml.j2"
         dest: "/opt/stack.yml"
         owner: root
         group: root
         mode: "0664"
+
+    - name: Create nginx docker dir
+      file:
+        path: "/opt/nginx"
+        state: directory
+        mode: "0664"
+
+    - name: Create nginx config file
+      template:
+        src: "templates/nginx.conf.j2"
+        dest: "/opt/nginx/nginx.conf"
+        owner: "root"
+        group: "root"
+        mode: "0664"
+      notify: Restart nginx service
 
     - name: Create docker swarm
       community.docker.docker_swarm:
@@ -32,7 +46,15 @@
 
     - name: Deploy docker stack
       community.docker.docker_stack:
-        name: wordpress
+        name: "{{ stack_name }}"
         state: present
         compose:
           - /opt/stack.yml
+
+    - name: Copy certbot script
+      template:
+        src: "templates/certbot.sh.j2"
+        dest: "/opt/certbot.sh"
+        owner: "root"
+        group: "root"
+        mode: "0774"

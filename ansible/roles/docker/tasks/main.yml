@@ -5,8 +5,25 @@
     state: latest
   when: ansible_facts["distribution"] == "Archlinux"
 
-- name: Install docker from curl
-  shell: "curl -fsSL https://get.docker.com/ | sh"
+- name: Check if docker-ce in yum repo
+  command: yum repolist
+  register: yum_repolist
+  when: ansible_facts["distribution"] == "CentOS"
+  changed_when: false
+
+- name: Add docker-ce yum repository
+  command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  when: ansible_facts["distribution"] == "CentOS" and "docker-ce" not in yum_repolist.stdout
+
+- name: Install dependencies for CentOS
+  package:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: latest
   when: ansible_facts["distribution"] == "CentOS"
 
 - name: Install Docker PIP dependencies, if missing
