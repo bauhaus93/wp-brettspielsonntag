@@ -37,11 +37,11 @@
         owner: "root"
         group: "root"
         mode: "0664"
-      notify: Restart nginx service
 
     - name: Create docker swarm
       community.docker.docker_swarm:
         advertise_addr: 10.114.0.2
+        heartbeat_tick: 10
         state: present
 
     - name: Deploy docker stack
@@ -58,3 +58,9 @@
         owner: "root"
         group: "root"
         mode: "0774"
+
+    - name: Add cronjob for certbot
+      cron:
+        name: Run certbot
+        job: /opt/certbot.sh
+        day: 1

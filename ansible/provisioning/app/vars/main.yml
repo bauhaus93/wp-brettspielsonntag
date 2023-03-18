@@ -1,12 +1,4 @@
-nginx_vhosts:
-  - listen: 80
-    server_name: brettspielsonntag
-    extra_parameters: |
-      location / {
-        proxy_pass http://0.0.0.0:8080;
-        proxy_read_timeout 90s;
-      }
-
+---
 firewall_open_ports:
   - { port: 80, prot: tcp }
   - { port: 443, prot: tcp }
